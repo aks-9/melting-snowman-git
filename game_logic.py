@@ -15,14 +15,22 @@ def display_game_state(mistakes, secret_word, guessed_letters):
     # Clamp mistakes so we never index out of range
     mistakes = max(0, min(mistakes, len(STAGES) - 1))
 
+    print("-" * 30)
     print(STAGES[mistakes])
 
     word_progress = " ".join(
         letter if letter in guessed_letters else "_"
         for letter in secret_word
     )
-    print("Word:", word_progress)
-    print()
+    
+    print(f"Word: {word_progress}")
+    
+    # Display guessed letters in alphabetical order for readability
+    if guessed_letters:
+        print(f"Guessed: {', '.join(sorted(guessed_letters))}")
+    else:
+        print("Guessed: (None)")
+    print("-" * 30)
 
 
 def get_valid_guess(guessed_letters):
@@ -40,7 +48,9 @@ def get_valid_guess(guessed_letters):
 
 def play_game():
     secret_word = get_random_word()
-    print("Welcome to Snowman Meltdown!")
+    print("\n" + "=" * 30)
+    print(" Welcome to Snowman Meltdown! ".center(30, "="))
+    print("=" * 30 + "\n")
 
     mistakes = 0
     guessed_letters = set()
@@ -53,20 +63,24 @@ def play_game():
         guessed_letters.add(guess)
 
         if guess in secret_word:
-            print(f"Good job! '{guess}' is in the word.")
+            print(f"\n✅ Good job! '{guess}' is in the word.")
         else:
-            print(f"Sorry, '{guess}' is not in the word.")
+            print(f"\n❌ Sorry, '{guess}' is not in the word.")
             mistakes += 1
 
         # Check if the word is fully guessed
         if all(letter in guessed_letters for letter in secret_word):
             display_game_state(mistakes, secret_word, guessed_letters)
-            print("Congratulations! You guessed the word!")
-            print("You saved the snowman!")
+            print("\n" + "*" * 30)
+            print(" Congratulations! ".center(30, "*"))
+            print(" You saved the snowman! ".center(30, "*"))
+            print("*" * 30 + "\n")
             break
     else:
         # This executes if the while loop finishes without a 'break'
         display_game_state(mistakes, secret_word, guessed_letters)
-        print("Game Over! The snowman has melted.")
-        print(f"The word was: {secret_word}")
-        print("You failed to save the snowman.")
+        print("\n" + "!" * 30)
+        print(" GAME OVER ".center(30, "!"))
+        print(f" Word: {secret_word} ".center(30, "!"))
+        print(" The snowman has melted. ".center(30, "!"))
+        print("!" * 30 + "\n")
